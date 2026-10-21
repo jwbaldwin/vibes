@@ -81,7 +81,7 @@ No data export/import was needed. Existing migrations built the schema; a fresh 
 
 ## Credential records
 
-1Password Private: `Vibes Production` and `Vibes GitHub Actions SSH`. The former admin login and production secure note are consolidated into the `Vibes Production` login item; the duplicate secure note is archived. The login password is `ADMIN_PASSWORD`, and admin autofill remains available. The database uses one `vibes` role for runtime and migrations
+1Password Private: `Vibes Production` and `Hetzner GitHub Actions SSH`. The SSH key is shared with Family Table's deploy workflow; both use the server's `deploy` account. The former admin login and production secure note are consolidated into the `Vibes Production` login item; the duplicate secure note is archived. The login password is `ADMIN_PASSWORD`, and admin autofill remains available. The database uses one `vibes` role for runtime and migrations
 
 See [Deploy another app](deploy-another-app.md) for the repeatable procedure and migration-specific lessons
 
