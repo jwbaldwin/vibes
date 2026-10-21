@@ -12,15 +12,15 @@ import Config
 # If you use `mix release`, you need to explicitly enable the server
 # by passing the PHX_SERVER=true when you start it:
 #
-#     PHX_SERVER=true bin/cafe start
+#     PHX_SERVER=true bin/vibes start
 #
 # Alternatively, you can use `mix phx.gen.release` to generate a `bin/server`
 # script that automatically sets the env var above.
 if System.get_env("PHX_SERVER") do
-  config :cafe, CafeWeb.Endpoint, server: true
+  config :vibes, VibesWeb.Endpoint, server: true
 end
 
-config :cafe, :admin_password, System.get_env("ADMIN_PASSWORD")
+config :vibes, :admin_password, System.get_env("ADMIN_PASSWORD")
 
 if config_env() == :prod do
   database_url =
@@ -32,7 +32,7 @@ if config_env() == :prod do
 
   maybe_ipv6 = if System.get_env("ECTO_IPV6") in ~w(true 1), do: [:inet6], else: []
 
-  config :cafe, Cafe.Repo,
+  config :vibes, Vibes.Repo,
     ssl: [verify: :verify_peer, cacerts: :public_key.cacerts_get()],
     url: database_url,
     default_prefix: "vibes",
@@ -54,9 +54,9 @@ if config_env() == :prod do
   host = System.get_env("PHX_HOST") || "example.com"
   port = String.to_integer(System.get_env("PORT") || "4000")
 
-  config :cafe, :dns_cluster_query, System.get_env("DNS_CLUSTER_QUERY")
+  config :vibes, :dns_cluster_query, System.get_env("DNS_CLUSTER_QUERY")
 
-  config :cafe, CafeWeb.Endpoint,
+  config :vibes, VibesWeb.Endpoint,
     url: [host: host, port: 443, scheme: "https"],
     http: [
       # Kamal proxy reaches this port over the private Docker network.
@@ -70,7 +70,7 @@ if config_env() == :prod do
   # To get SSL working, you will need to add the `https` key
   # to your endpoint configuration:
   #
-  #     config :cafe, CafeWeb.Endpoint,
+  #     config :vibes, VibesWeb.Endpoint,
   #       https: [
   #         ...,
   #         port: 443,
@@ -92,7 +92,7 @@ if config_env() == :prod do
   # We also recommend setting `force_ssl` in your config/prod.exs,
   # ensuring no data is ever sent via http, always redirecting to https:
   #
-  #     config :cafe, CafeWeb.Endpoint,
+  #     config :vibes, VibesWeb.Endpoint,
   #       force_ssl: [hsts: true]
   #
   # Check `Plug.SSL` for all available options in `force_ssl`.
@@ -103,7 +103,7 @@ if config_env() == :prod do
   # Also, you may need to configure the Swoosh API client of your choice if you
   # are not using SMTP. Here is an example of the configuration:
   #
-  #     config :cafe, Cafe.Mailer,
+  #     config :vibes, Vibes.Mailer,
   #       adapter: Swoosh.Adapters.Mailgun,
   #       api_key: System.get_env("MAILGUN_API_KEY"),
   #       domain: System.get_env("MAILGUN_DOMAIN")

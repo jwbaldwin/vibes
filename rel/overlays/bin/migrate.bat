@@ -1,1 +1,1 @@
-call "%~dp0\cafe" eval Cafe.Release.migrate
+call "%~dp0\vibes" eval Vibes.Release.migrate

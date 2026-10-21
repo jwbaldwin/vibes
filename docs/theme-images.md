@@ -1,6 +1,6 @@
 # Theme image assets
 
-`CafeWeb.StationPicker` renders each station’s stored `image_url`. The initial catalog points to the 10 bundled thumbnails in `priv/static/images/themes/{seasons,vibes}/*/thumbs/1.webp`; admin-created stations can use other local paths, HTTPS images, or a music-icon placeholder. The static endpoint already serves the `images` directory.
+`VibesWeb.StationPicker` renders each station’s stored `image_url`. The initial catalog points to the 10 bundled thumbnails in `priv/static/images/themes/{seasons,vibes}/*/thumbs/1.webp`; admin-created stations can use other local paths, HTTPS images, or a music-icon placeholder. The static endpoint already serves the `images` directory.
 
 ## Inventory and cleanup
 
@@ -44,4 +44,4 @@ rg -n --hidden \
   lib assets config test priv/repo
 ```
 
-Bundled image paths are now recorded in the station seed data and settings migration. `lib/cafe_web/live/components/station_picker.ex` reads the URL from each station record. Before removing an asset, also inspect `SELECT id, name, image_url FROM stations`: admin edits live in Postgres, so a repository search alone cannot establish that an image is unused.
+Bundled image paths are now recorded in the station seed data and settings migration. `lib/vibes_web/live/components/station_picker.ex` reads the URL from each station record. Before removing an asset, also inspect `SELECT id, name, image_url FROM stations`: admin edits live in Postgres, so a repository search alone cannot establish that an image is unused.
