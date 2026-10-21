@@ -1,5 +1,5 @@
-defmodule Cafe.StationsFixtures do
-  def station_named(name), do: Cafe.Repo.get_by!(Cafe.Stations.Station, name: to_string(name))
+defmodule Vibes.StationsFixtures do
+  def station_named(name), do: Vibes.Repo.get_by!(Vibes.Stations.Station, name: to_string(name))
 
   def station_attrs(attrs \\ %{}) do
     Map.merge(

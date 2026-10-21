@@ -1,4 +1,4 @@
-defmodule Cafe.Repo.Migrations.AddCuration do
+defmodule Vibes.Repo.Migrations.AddCuration do
   use Ecto.Migration
 
   def change do

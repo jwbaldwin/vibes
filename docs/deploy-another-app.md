@@ -41,7 +41,7 @@ The role owns the tables it creates and can apply later migrations to them. Keep
 
 PlanetScale's MCP admin connection cannot alter tables owned by an app role. Move those tables using the existing app credentials after granting access to the destination schema
 
-Configure Ecto queries and release migrations with the app's schema prefix, following `Cafe.Repo`, `Cafe.Release`, and `config/runtime.exs`. The role's search path covers raw SQL too. Set it on the role rather than as a client startup parameter, which the pooled endpoint rejects
+Configure Ecto queries and release migrations with the app's schema prefix, following `Vibes.Repo`, `Vibes.Release`, and `config/runtime.exs`. The role's search path covers raw SQL too. Set it on the role rather than as a client startup parameter, which the pooled endpoint rejects
 
 Use two connection URLs with the same username/password:
 
@@ -81,7 +81,7 @@ Build Linux amd64 images on GitHub Actions, then run the migration command from 
 
 Run the image migration twice against a disposable Postgres service in non-production workflows to exercise both a fresh database and an already migrated schema. Gate production deployment on that check and keep production credentials limited to the deployment environment.
 
-For a fresh database, run `/app/bin/cafe eval Cafe.Release.seed` from the checked release after migration. Keep catalog seeding separate from migrations so an existing database never receives an unexpected reset or replacement of administrator edits.
+For a fresh database, run `/app/bin/vibes eval Vibes.Release.seed` from the checked release after migration. Keep catalog seeding separate from migrations so an existing database never receives an unexpected reset or replacement of administrator edits.
 
 Run migrations automatically from the built release before deploying it. A failed migration stops deployment. A schema rename can briefly interrupt requests from the old release until the new release starts; Vibes accepts that interruption. A code rollback does not undo schema changes, so an older release must still understand the database schema.
 

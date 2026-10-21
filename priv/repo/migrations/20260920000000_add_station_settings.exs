@@ -1,4 +1,4 @@
-defmodule Cafe.Repo.Migrations.AddStationSettings do
+defmodule Vibes.Repo.Migrations.AddStationSettings do
   use Ecto.Migration
 
   def up do
