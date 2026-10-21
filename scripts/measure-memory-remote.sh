@@ -15,7 +15,7 @@ app_a="$prefix-a"
 app_b="$prefix-b"
 client="$prefix-client"
 release_container="$prefix-release"
-postgres=postgres:18.1-alpine
+postgres=postgres:18.6-alpine
 python=python:3.13-slim
 sampler=''
 cleanup() {
