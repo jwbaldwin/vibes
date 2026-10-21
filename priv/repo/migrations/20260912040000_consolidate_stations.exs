@@ -1,4 +1,4 @@
-defmodule Cafe.Repo.Migrations.ConsolidateStations do
+defmodule Vibes.Repo.Migrations.ConsolidateStations do
   use Ecto.Migration
 
   @moduledoc """

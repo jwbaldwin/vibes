@@ -4,26 +4,26 @@ if Mix.env() != :test, do: raise("migration verification requires MIX_ENV=test")
 
 Application.ensure_all_started(:ecto_sql)
 Application.ensure_all_started(:postgrex)
-Application.load(:cafe)
+Application.load(:vibes)
 
 config =
-  Application.fetch_env!(:cafe, Cafe.Repo)
-  |> Keyword.put(:database, "cafe_migration_verify_#{System.system_time(:microsecond)}")
+  Application.fetch_env!(:vibes, Vibes.Repo)
+  |> Keyword.put(:database, "vibes_migration_verify_#{System.system_time(:microsecond)}")
   |> Keyword.put(:pool, DBConnection.ConnectionPool)
   |> Keyword.put(:pool_size, 5)
   |> Keyword.put(:log, false)
 
-Application.put_env(:cafe, Cafe.Repo, config)
+Application.put_env(:vibes, Vibes.Repo, config)
 :ok = Ecto.Adapters.Postgres.storage_up(config)
-{:ok, repo} = Cafe.Repo.start_link()
-migrations = Application.app_dir(:cafe, "priv/repo/migrations")
+{:ok, repo} = Vibes.Repo.start_link()
+migrations = Application.app_dir(:vibes, "priv/repo/migrations")
 old_version = 20_260_909_040_000
 new_version = 20_260_912_040_000
 assert = fn condition, message -> if !condition, do: raise(message) end
-query = &Cafe.Repo.query!/1
+query = &Vibes.Repo.query!/1
 
 try do
-  Ecto.Migrator.run(Cafe.Repo, migrations, :up, to: old_version, log: false)
+  Ecto.Migrator.run(Vibes.Repo, migrations, :up, to: old_version, log: false)
 
   query.("""
   INSERT INTO playlists (name, theme, videos, lock_version, inserted_at, updated_at)
@@ -43,10 +43,10 @@ try do
       "SELECT id,message,kind,video_id,playlist_name,source,status,admin_note,inserted_at,updated_at FROM feedback"
     ).rows
 
-  Ecto.Migrator.run(Cafe.Repo, migrations, :up, all: true, log: false)
+  Ecto.Migrator.run(Vibes.Repo, migrations, :up, all: true, log: false)
 
   assert.(
-    Ecto.Migrator.run(Cafe.Repo, migrations, :up, all: true, log: false) == [],
+    Ecto.Migrator.run(Vibes.Repo, migrations, :up, all: true, log: false) == [],
     "migration rerun was not a no-op"
   )
 
@@ -99,7 +99,7 @@ try do
     "seeds overwrote curated station"
   )
 
-  Ecto.Migrator.run(Cafe.Repo, migrations, :down, step: 2, log: false)
+  Ecto.Migrator.run(Vibes.Repo, migrations, :down, step: 2, log: false)
 
   assert.(
     query.(
@@ -121,7 +121,7 @@ try do
 
   refused =
     try do
-      Ecto.Migrator.run(Cafe.Repo, migrations, :up, to: new_version, log: false)
+      Ecto.Migrator.run(Vibes.Repo, migrations, :up, to: new_version, log: false)
       false
     rescue
       error in RuntimeError ->
