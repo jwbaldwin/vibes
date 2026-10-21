@@ -38,14 +38,14 @@ defmodule Vibes.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "~> 1.8.9"},
+      {:phoenix, "~> 1.8.16"},
       {:phoenix_ecto, "~> 4.7"},
       {:ecto_sql, "~> 3.14"},
-      {:postgrex, "~> 0.22.3"},
+      {:postgrex, "~> 0.22.4"},
       {:phoenix_html, "~> 4.3"},
       {:phoenix_live_reload, "~> 1.6", only: :dev},
-      {:phoenix_live_view, "~> 1.2.7"},
-      {:lazy_html, "~> 0.1.11", only: :test},
+      {:phoenix_live_view, "~> 1.2.13"},
+      {:lazy_html, "~> 0.1.13", only: :test},
       {:phoenix_live_dashboard, "~> 0.8.7"},
       {:esbuild, "~> 0.10.0", runtime: Mix.env() == :dev},
       {:tailwind, "~> 0.5.1", runtime: Mix.env() == :dev},
@@ -63,7 +63,7 @@ defmodule Vibes.MixProject do
       {:gettext, "~> 1.0"},
       {:jason, "~> 1.4"},
       {:dns_cluster, "~> 0.2.0"},
-      {:bandit, "~> 1.12"}
+      {:bandit, "~> 1.13.1"}
     ]
   end
 

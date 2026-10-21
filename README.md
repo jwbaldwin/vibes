@@ -6,8 +6,8 @@ The Elixir app and release are `vibes`, with `Vibes` and `VibesWeb` modules. Loc
 
 ## Requirements
 
-- Erlang/OTP 29.0.3
-- Elixir 1.20.2
+- Erlang/OTP 29.1.2
+- Elixir 1.20.4
 - PostgreSQL 18.1
 
 The exact local versions are recorded in `.tool-versions`. If PostgreSQL is not installed locally, start it with `docker compose up -d postgres`.
