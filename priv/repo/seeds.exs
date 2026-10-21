@@ -1,7 +1,7 @@
 # Run with mix run priv/repo/seeds.exs. Existing stations keep their admin edits.
 
-alias Cafe.Repo
-alias Cafe.Stations.Station
+alias Vibes.Repo
+alias Vibes.Stations.Station
 
 {stations, _binding} = Code.eval_file(Path.join(__DIR__, "station_seed_data.exs"))
 

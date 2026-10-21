@@ -44,7 +44,7 @@ docker stats --no-stream --format '{{json .}}' > "$work/results/baseline-stats.j
 production=$(docker ps -q --filter label=service=vibes | head -n 1)
 if [[ -n "$production" ]]; then
   docker image inspect "$(docker inspect --format '{{.Image}}' "$production")" --format '{{.Size}}' > "$work/results/production-image-bytes.txt"
-  docker exec "$production" sh -c 'du -sk /app/lib/cafe-*/priv/static/images/themes' > "$work/results/production-theme-kib.txt"
+  docker exec "$production" sh -c 'du -sk /app/lib/*/priv/static/images/themes' > "$work/results/production-theme-kib.txt"
 fi
 cp /proc/meminfo "$work/results/baseline-meminfo.txt"
 printf '%s' "$KAMAL_REGISTRY_PASSWORD" | docker login ghcr.io -u "$KAMAL_REGISTRY_USERNAME" --password-stdin >/dev/null
@@ -80,7 +80,7 @@ release() {
   docker run --rm --name "$release_container" --label "service=$prefix" --label "vibes-memory=$prefix" --network "$network" --memory 384m --cpus .5 --env-file "$work/app.env" -v "$work/certs/ca.crt:/etc/ssl/certs/ca-certificates.crt:ro" "$CANDIDATE_IMAGE" "$@"
 }
 release /app/bin/migrate > "$work/results/migration.log" 2>&1
-release /app/bin/cafe eval Cafe.Release.seed >> "$work/results/migration.log" 2>&1
+release /app/bin/vibes eval Vibes.Release.seed >> "$work/results/migration.log" 2>&1
 start_app() {
   docker run -d --name "$1" --label "service=$prefix" --label "vibes-memory=$prefix" --network "$network" --memory 384m --cpus .5 --env-file "$work/app.env" -v "$work/certs/ca.crt:/etc/ssl/certs/ca-certificates.crt:ro" "$CANDIDATE_IMAGE" >/dev/null
   local ip
@@ -93,7 +93,7 @@ start_app() {
   return 1
 }
 start_app "$app_a"
-docker exec "$app_a" sh -c 'du -sk /app/lib/cafe-*/priv/static/images/themes' > "$work/results/candidate-theme-kib.txt"
+docker exec "$app_a" sh -c 'du -sk /app/lib/*/priv/static/images/themes' > "$work/results/candidate-theme-kib.txt"
 # Sampling is separate from the load client and remains bounded to this run.
 (
   while true; do
@@ -114,7 +114,7 @@ phase() {
   test ! -e "$work/results/pressure-abort.txt"
   # Reset only the disposable database so every phase starts with the same catalog.
   docker exec "$pg" psql -U postgres -d vibes_memory -v ON_ERROR_STOP=1 -c 'TRUNCATE stations' >/dev/null
-  release /app/bin/cafe eval Cafe.Release.seed >/dev/null 2>&1
+  release /app/bin/vibes eval Vibes.Release.seed >/dev/null 2>&1
   local station_ids
   station_ids=$(docker exec "$pg" psql -U postgres -d vibes_memory -Atc 'SELECT id FROM stations ORDER BY position, id')
   printf '%s\n' "$name" > "$work/phase"

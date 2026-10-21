@@ -1,7 +1,7 @@
 {
   "measured_at_utc": "2026-09-13",
   "candidate_commit": "188bfdf2e69ebb1516b1e10b3d287ca897a06e57",
-  "workflow": "https://github.com/jwbaldwin/lv_cafe/actions/runs/34732924776",
+  "workflow": "https://github.com/jwbaldwin/vibes/actions/runs/34732924776",
   "host_cpus": 2,
   "host_memory_gib": 1.875,
   "duration_seconds_per_phase": 25,

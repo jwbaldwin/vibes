@@ -1,4 +1,4 @@
-# Cafe Project Guide
+# Vibes Project Guide
 
 ## Common Commands
 - Setup: `mix setup` (installs deps, creates DB, runs migrations, seeds DB, assets)
@@ -11,7 +11,7 @@
 
 ## Code Style Guidelines
 - **Naming**: PascalCase for modules, snake_case for functions/variables
-- **Modules**: Context-based design with Cafe.* for business logic, CafeWeb.* for web layer
+- **Modules**: Context-based design with Vibes.* for business logic, VibesWeb.* for web layer
 - **LiveView**: Component-based design with clear separation of concerns
 - **Imports**: Group by type (Phoenix, Ecto, custom), avoid wildcard imports
 - **Formatting**: Follows Phoenix conventions, see .formatter.exs

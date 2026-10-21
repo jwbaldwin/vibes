@@ -4,7 +4,7 @@
 
 Vibes runs as a Docker container on the existing Ubuntu 24.04 Hetzner server, managed by Kamal 2.12.0. Kamal proxy serves `PHX_HOST` over HTTPS. GitHub Actions builds amd64 images in GitHub Container Registry and deploys main only after checks pass. Gemfile.lock fixes the deployment-tool versions; Dependabot proposes upgrades.
 
-The Kamal service and image are `vibes` and `ghcr.io/jwbaldwin/vibes`. The internal Elixir release remains `cafe`. Port 4000 is reachable inside the Docker network, with no published app port. Kamal proxy routes each domain to its own app, allowing other Kamal services on this server without allocating separate host ports.
+The Kamal service and image are `vibes` and `ghcr.io/jwbaldwin/vibes`. The internal Elixir release is `vibes`. Port 4000 is reachable inside the Docker network, with no published app port. Kamal proxy routes each domain to its own app, allowing other Kamal services on this server without allocating separate host ports.
 
 Database: PlanetScale `weirdbit/arda`, Postgres 18, PS-5 single node in us-east-1, $5/month base price. Storage is capped at the included 10 GB. The SQL database is `postgres`; Vibes owns the `vibes` schema within it. Other small apps get their own schemas and roles in the same cluster. App traffic uses included PgBouncer on 6432 with a five-connection Ecto pool. Schema changes run from the exact release image in CI through the direct endpoint on 5432 with verified TLS.
 
@@ -39,7 +39,7 @@ Install the Gemfile with Bundler and run commands with `bundle exec`. Normal dep
 - Logs: `bundle exec kamal app logs`
 - Rollback: `bundle exec kamal rollback VERSION`
 
-Schema changes run before app deployment so the readiness check can query the new database. Keep future migrations compatible with the running app; a code rollback does not undo schema changes. Cafe.Release.migrate remains available for release-based operations, but the checked-in migration wrapper requires a direct database connection.
+Schema changes run before app deployment so the readiness check can query the new database. Keep future migrations compatible with the running app; a code rollback does not undo schema changes. Vibes.Release.migrate remains available for release-based operations, but the checked-in migration wrapper requires a direct database connection.
 
 ## Release-image migrations
 
@@ -47,7 +47,7 @@ The deploy job logs in to GHCR, pulls `ghcr.io/jwbaldwin/vibes:${GITHUB_SHA}`, a
 
 Non-pull-request workflows also run that exact image twice against a disposable Postgres service before production deployment: the first pass exercises a fresh schema and the second pass exercises an already migrated schema. The test role has access only to `vibes`; the check also seeds twice, reads the catalog through the app, and confirms `public` has no tables. That check uses test-only credentials and does not load the production environment.
 
-For a fresh disposable database or a new installation, load the catalog only after migrations with `/app/bin/cafe eval Cafe.Release.seed`. Seeds are separate from schema migrations, are safe to rerun, and do not run as part of a production deploy against an existing catalog.
+For a fresh disposable database or a new installation, load the catalog only after migrations with `/app/bin/vibes eval Vibes.Release.seed`. Seeds are separate from schema migrations, are safe to rerun, and do not run as part of a production deploy against an existing catalog.
 
 The migration step uses `set -euo pipefail`, so a failed migration prevents `kamal setup` or `kamal deploy` from running. Kamal then deploys the same `${GITHUB_SHA}` with `--skip-push --version`, preserving its normal deploy lock, proxy health check, and old-container drain behavior. Workflow runs for the same commit are serialized so a concurrent rebuild cannot replace its image tag during verification or deployment. A measurement-only dispatch also cannot deploy. A workflow dispatch from a non-main ref builds its candidate image but cannot run the production deploy job; production dispatches must target `main`.
 
@@ -81,7 +81,7 @@ No data export/import was needed. Existing migrations built the schema; a fresh 
 
 ## Credential records
 
-1Password Private: `Vibes Production` and `Vibes GitHub Actions SSH`. The former admin login and production secure note are consolidated into the `Vibes Production` login item; the duplicate secure note is archived. The login password is `ADMIN_PASSWORD`, and admin autofill remains available. The database uses one `vibes` role for runtime and migrations
+1Password Private: `Vibes Production` and `Hetzner GitHub Actions SSH`. The SSH key is shared with Family Table's deploy workflow; both use the server's `deploy` account. The former admin login and production secure note are consolidated into the `Vibes Production` login item; the duplicate secure note is archived. The login password is `ADMIN_PASSWORD`, and admin autofill remains available. The database uses one `vibes` role for runtime and migrations
 
 See [Deploy another app](deploy-another-app.md) for the repeatable procedure and migration-specific lessons
 
@@ -111,7 +111,7 @@ Public probes had triggered certificate requests on the staged proxy while the d
 Origin certificate issuance recovered with Cloudflare proxying still enabled and Full (strict) preserved. No DNS-only workaround, custom certificate, or TLS verification bypass was needed. The origin serves a Let’s Encrypt YE1 certificate for `vibes.jwbaldwin.com`, valid through December 9, 2026; Kamal manages renewal. Avoid premature certificate attempts while DNS still points elsewhere, and honor ACME retry windows instead of repeatedly probing a pending origin.
 
 - Public and direct-origin HTTPS health checks returned 200; the public response passed through Cloudflare
-- The normal main deployment rerun completed successfully, including migrations, Kamal replacement, and the public health check: [run 34430446202](https://github.com/jwbaldwin/lv_cafe/actions/runs/34430446202)
+- The normal main deployment rerun completed successfully, including migrations, Kamal replacement, and the public health check: [run 34430446202](https://github.com/jwbaldwin/vibes/actions/runs/34430446202)
 - Browser LiveView connected, station switching changed the video, and a feedback submission reached the database. Public HTTPS admin authentication passed
 - A playlist update through the app role and verified-TLS PgBouncer connection succeeded inside a rolled-back transaction. The exact feedback test row was removed afterward
 - Deleted Fly apps `vibes-cafe` and `vibes-cafe-db`, including their machines and database volume. Provider inventory confirms neither app remains; unrelated Fly applications remain intact

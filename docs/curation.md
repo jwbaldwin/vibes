@@ -38,7 +38,7 @@ For local development, configure the environment, run `mix ecto.migrate`, then r
 
 ## Database and migration
 
-`Cafe.Stations` owns persistent station retrieval and editing, plus pure playback selection. `Cafe.Curation` owns the feedback inbox.
+`Vibes.Stations` owns persistent station retrieval and editing, plus pure playback selection. `Vibes.Curation` owns the feedback inbox.
 
 - `stations`: ID, editable name and category, unique shortcut, display position, optional image URL, effect, ordered embedded videos, timestamps, and `lock_version` for optimistic locking. Categories are free text. Equal positions are ordered by ID. The first station in display order is the default when no valid saved selection exists.
 - `feedback`: message, kind, station/video context (`station_name`, `video_id`), source, review status, admin note, and timestamps.
@@ -47,7 +47,7 @@ The consolidation migration preserves curated video lists, names, edit versions,
 
 The station settings migration fills existing stations with their former shortcuts, images, effects, and picker order without changing curated videos or feedback. It runs automatically during deployment. The picker, presence, admin URLs, and saved browser selection use station IDs. Old name-based browser preferences are intentionally unsupported. Feedback retains the station name recorded when it was submitted.
 
-Each connected player loads its station catalog once. Its station and current `%Cafe.Stations.Playback{}` are separate assigns. Next/previous, automatic advancement, error skipping, and switching among loaded stations use in-memory data and perform no database queries. No shared Cachex layer is needed.
+Each connected player loads its station catalog once. Its station and current `%Vibes.Stations.Playback{}` are separate assigns. Next/previous, automatic advancement, error skipping, and switching among loaded stations use in-memory data and perform no database queries. No shared Cachex layer is needed.
 
 A successful admin create or save broadcasts the station and edit version. New stations appear in the picker immediately, and a first station starts playback for players waiting on an empty catalog. Players replace only that catalog entry, including when another station is currently playing. Older broadcast versions are ignored. Reorders preserve the current video and update its index; removing that video chooses the next available position. A new player or reconnected LiveView reloads authoritative Postgres state.
 

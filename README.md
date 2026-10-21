@@ -1,6 +1,8 @@
-# Cafe
+# Vibes
 
 An ambient video cafe built with Phoenix LiveView.
+
+The Elixir app and release are `vibes`, with `Vibes` and `VibesWeb` modules. Local development and tests keep the existing `cafe_dev` and `cafe_test` database names so the rename does not replace local data. The session cookie keeps its `_cafe_key` name and signing settings so existing sessions remain valid.
 
 ## Requirements
 

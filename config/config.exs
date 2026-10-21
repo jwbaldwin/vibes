@@ -7,19 +7,19 @@
 # General application configuration
 import Config
 
-config :cafe,
-  ecto_repos: [Cafe.Repo],
+config :vibes,
+  ecto_repos: [Vibes.Repo],
   generators: [timestamp_type: :utc_datetime]
 
 # Configures the endpoint
-config :cafe, CafeWeb.Endpoint,
+config :vibes, VibesWeb.Endpoint,
   url: [host: "localhost"],
   adapter: Bandit.PhoenixAdapter,
   render_errors: [
-    formats: [html: CafeWeb.ErrorHTML, json: CafeWeb.ErrorJSON],
+    formats: [html: VibesWeb.ErrorHTML, json: VibesWeb.ErrorJSON],
     layout: false
   ],
-  pubsub_server: Cafe.PubSub,
+  pubsub_server: Vibes.PubSub,
   live_view: [signing_salt: "WybFqbhV"]
 
 # Configures the mailer
@@ -29,12 +29,12 @@ config :cafe, CafeWeb.Endpoint,
 #
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
-config :cafe, Cafe.Mailer, adapter: Swoosh.Adapters.Local
+config :vibes, Vibes.Mailer, adapter: Swoosh.Adapters.Local
 
 # Configure esbuild (the version is required)
 config :esbuild,
   version: "0.25.6",
-  cafe: [
+  vibes: [
     args: ~w(
       js/app.js
       --bundle
@@ -51,7 +51,7 @@ config :esbuild,
 # Configure tailwind (the version is required)
 config :tailwind,
   version: "4.1.11",
-  cafe: [
+  vibes: [
     args: ~w(
       --input=css/app.css
       --output=../priv/static/assets/app.css

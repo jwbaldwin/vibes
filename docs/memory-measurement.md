@@ -21,7 +21,7 @@ For a manual run, first configure the existing SSH agent and pinned known_hosts 
 
 ## Results
 
-Measured on 2026-09-13 UTC on the existing 2-CPU, 1.875-GiB Hetzner host, using candidate `188bfdf2e69ebb1516b1e10b3d287ca897a06e57`. [The complete workflow passed](https://github.com/jwbaldwin/lv_cafe/actions/runs/34732924776); its artifact contains the raw samples, client reports, and cleanup verification. A durable [measurement summary](measurements/2026-09-13.json) is checked in here.
+Measured on 2026-09-13 UTC on the existing 2-CPU, 1.875-GiB Hetzner host, using candidate `188bfdf2e69ebb1516b1e10b3d287ca897a06e57`. [The complete workflow passed](https://github.com/jwbaldwin/vibes/actions/runs/34732924776); its artifact contains the raw samples, client reports, and cleanup verification. A durable [measurement summary](measurements/2026-09-13.json) is checked in here.
 
 | Scenario | Peak candidate A | Peak candidate B | Minimum host available |
 | --- | ---: | ---: | ---: |

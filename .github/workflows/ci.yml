@@ -97,12 +97,12 @@ jobs:
       postgres:
         image: postgres:18.1-alpine
         env:
-          POSTGRES_DB: cafe
+          POSTGRES_DB: vibes
           POSTGRES_PASSWORD: postgres
         ports:
           - 5432:5432
         options: >-
-          --health-cmd "pg_isready -U postgres -d cafe"
+          --health-cmd "pg_isready -U postgres -d vibes"
           --health-interval 5s
           --health-timeout 5s
           --health-retries 5
@@ -116,7 +116,7 @@ jobs:
         env:
           # The local disposable service has no trusted certificate; production
           # migrations use the verified-TLS DIRECT_DATABASE_URL secret below.
-          DIRECT_DATABASE_URL: ecto://vibes_app:disposable@127.0.0.1:5432/cafe?ssl=false
+          DIRECT_DATABASE_URL: ecto://vibes_app:disposable@127.0.0.1:5432/vibes?ssl=false
           SECRET_KEY_BASE: release-migration-check-only
         run: |
           set -euo pipefail
@@ -143,22 +143,22 @@ jobs:
               psql --host=127.0.0.1 --username=postgres "$@"
           }
 
-          postgres --dbname=cafe -v ON_ERROR_STOP=1 <<'SQL'
+          postgres --dbname=vibes -v ON_ERROR_STOP=1 <<'SQL'
           CREATE ROLE vibes_app LOGIN PASSWORD 'disposable';
           CREATE SCHEMA vibes;
           GRANT USAGE, CREATE ON SCHEMA vibes TO vibes_app;
-          ALTER ROLE vibes_app IN DATABASE cafe SET search_path TO vibes;
+          ALTER ROLE vibes_app IN DATABASE vibes SET search_path TO vibes;
           SQL
           docker pull "$image"
           docker run --rm --network host --env-file "$migration_env" "$image" /app/bin/migrate
           docker run --rm --network host --env-file "$migration_env" "$image" /app/bin/migrate
-          docker run --rm --network host --env-file "$migration_env" "$image" /app/bin/cafe eval Cafe.Release.seed
-          docker run --rm --network host --env-file "$migration_env" "$image" /app/bin/cafe eval Cafe.Release.seed
-          docker run --rm --network host --env-file "$migration_env" "$image" /app/bin/cafe eval \
-            'Application.load(:cafe); Ecto.Migrator.with_repo(Cafe.Repo, fn _ -> [_ | _] = Cafe.Stations.list_stations() end)'
-          test "$(postgres --dbname=cafe -tAc 'SELECT COUNT(*) FROM vibes.schema_migrations')" -gt 0
-          test "$(postgres --dbname=cafe -tAc 'SELECT COUNT(*) FROM vibes.stations')" -gt 0
-          test "$(postgres --dbname=cafe -tAc "SELECT COUNT(*) FROM pg_tables WHERE schemaname = 'public'")" -eq 0
+          docker run --rm --network host --env-file "$migration_env" "$image" /app/bin/vibes eval Vibes.Release.seed
+          docker run --rm --network host --env-file "$migration_env" "$image" /app/bin/vibes eval Vibes.Release.seed
+          docker run --rm --network host --env-file "$migration_env" "$image" /app/bin/vibes eval \
+            'Application.load(:vibes); Ecto.Migrator.with_repo(Vibes.Repo, fn _ -> [_ | _] = Vibes.Stations.list_stations() end)'
+          test "$(postgres --dbname=vibes -tAc 'SELECT COUNT(*) FROM vibes.schema_migrations')" -gt 0
+          test "$(postgres --dbname=vibes -tAc 'SELECT COUNT(*) FROM vibes.stations')" -gt 0
+          test "$(postgres --dbname=vibes -tAc "SELECT COUNT(*) FROM pg_tables WHERE schemaname = 'public'")" -eq 0
 
   memory-benchmark:
     name: Measure isolated candidate on Hetzner

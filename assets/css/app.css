@@ -1,7 +1,7 @@
 @import "tailwindcss" source(none);
 @source "../css";
 @source "../js";
-@source "../../lib/cafe_web";
+@source "../../lib/vibes_web";
 
 @plugin "../vendor/heroicons";
 
