@@ -81,16 +81,17 @@ defmodule VibesWeb.StationAdminTest do
 
   test "creation shows errors and preserves entered settings" do
     {:ok, admin, _} = admin("/admin?new=true")
+    station_count = length(Stations.list_stations())
     attrs = station_attrs(%{"shortcut" => "s"}) |> Map.delete("videos")
     admin |> form("#new-station", station: attrs, video_url: "abcdefghijk") |> render_submit()
     assert render(admin) =~ "has already been taken"
     assert has_element?(admin, "input[name='station[name]'][value='Night train']")
     assert has_element?(admin, "input[name=video_url][value=abcdefghijk]")
-    assert length(Stations.list_stations()) == 10
+    assert length(Stations.list_stations()) == station_count
 
     admin |> form("#new-station", station: %{shortcut: "n"}, video_url: "bad") |> render_submit()
     assert render(admin) =~ "Enter a valid YouTube"
-    assert length(Stations.list_stations()) == 10
+    assert length(Stations.list_stations()) == station_count
   end
 
   test "stale settings load the latest version after a rename" do

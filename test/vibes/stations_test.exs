@@ -13,7 +13,7 @@ defmodule Vibes.StationsTest do
   test "loads stations in display order" do
     names = Enum.map(Stations.list_stations(), &{&1.position, &1.id})
     assert names == Enum.sort(names)
-    assert length(names) == 10
+    assert length(names) == 11
     assert station_named(:spring).category == "seasons"
     assert Stations.get_station!(station_named("spring").id).name == "spring"
   end
@@ -102,9 +102,10 @@ defmodule Vibes.StationsTest do
                "effect" => "spring"
              })
 
+    station_count = length(Stations.list_stations())
     Code.eval_file("priv/repo/seeds.exs")
     assert Stations.get_station!(original.id) == updated
-    assert length(Stations.list_stations()) == 10
+    assert length(Stations.list_stations()) == station_count
   end
 
   test "edits preserve optimistic locking and broadcast the saved snapshot" do
