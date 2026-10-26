@@ -10,7 +10,12 @@ The Elixir app and release are `vibes`, with `Vibes` and `VibesWeb` modules. Loc
 - Elixir 1.20.4
 - PostgreSQL 18.6
 
-The exact local versions are recorded in `.tool-versions`. If PostgreSQL is not installed locally, start it with `docker compose up -d postgres`.
+The exact local versions are recorded in `.tool-versions`; install them with `mise install`. Development expects PostgreSQL on `localhost:5432` with a `postgres` superuser. With mise's PostgreSQL:
+
+```sh
+initdb -D ~/.local/share/postgres/18 -U postgres --auth=trust -E UTF8 --locale=en_US.UTF-8
+pg_ctl -D ~/.local/share/postgres/18 -l ~/Library/Logs/postgres18.log start
+```
 
 ## Setup
 
