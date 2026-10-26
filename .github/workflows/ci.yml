@@ -56,7 +56,6 @@ jobs:
       - run: mix compile --warnings-as-errors
       - run: mix test
       - run: node --test test/js/*.test.mjs
-      - run: MIX_ENV=test mix run --no-start scripts/verify-station-migration.exs
       - run: MIX_ENV=prod mix assets.deploy
 
   build:

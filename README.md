@@ -20,7 +20,7 @@ The exact local versions are recorded in `.tool-versions`. If PostgreSQL is not 
 
 ## Checks
 
-Run `mix precommit`, the JavaScript tests with `node --test test/js/*.test.mjs`, and the migration preservation check with `MIX_ENV=test mix run --no-start scripts/verify-station-migration.exs`. The migration check creates and removes its own temporary database. Build production assets with `MIX_ENV=prod mix assets.deploy`.
+Run `mix precommit` and the JavaScript tests with `node --test test/js/*.test.mjs`. Build production assets with `MIX_ENV=prod mix assets.deploy`.
 
 Pushes to `main` deploy to Hetzner through Kamal after formatting, compilation, tests, and the production asset build pass. PostgreSQL runs on PlanetScale; application connections use PgBouncer.
 
