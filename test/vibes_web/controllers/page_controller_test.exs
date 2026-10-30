@@ -42,6 +42,25 @@ defmodule VibesWeb.PageControllerTest do
     assert meta(html, "og:video") == []
   end
 
+  test "a station with preview art shares its image and looping video", %{conn: conn} do
+    # The azeroth station comes from its migration.
+    html = conn |> get("/azeroth") |> html_response(200) |> LazyHTML.from_document()
+    video = "https://vibes.jwbaldwin.com/images/og/azeroth.mp4"
+
+    assert meta(html, "og:image") == ["https://vibes.jwbaldwin.com/images/og/azeroth.jpg"]
+    assert meta(html, "twitter:image") == meta(html, "og:image")
+    assert meta(html, "og:video") == [video]
+    assert meta(html, "og:video:secure_url") == [video]
+    assert meta(html, "og:video:type") == ["video/mp4"]
+
+    for {path, type} <- [
+          {"/images/og/azeroth.jpg", "image/jpeg"},
+          {"/images/og/azeroth.mp4", "video/mp4"}
+        ] do
+      assert build_conn() |> get(path) |> get_resp_header("content-type") == [type]
+    end
+  end
+
   test "an unknown station link sends visitors home", %{conn: conn} do
     assert redirected_to(get(conn, "/no-such-station")) == ~p"/"
   end
