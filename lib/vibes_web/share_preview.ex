@@ -43,6 +43,8 @@ defmodule VibesWeb.SharePreview do
 
   defp asset_url(slug, extension) do
     path = "/images/og/#{slug}.#{extension}"
-    if File.exists?(Application.app_dir(:vibes, "priv/static" <> path)), do: @origin <> path
+    # The digested path changes with the file, so replaced art skips stale CDN copies.
+    if File.exists?(Application.app_dir(:vibes, "priv/static" <> path)),
+      do: @origin <> VibesWeb.Endpoint.static_path(path)
   end
 end
