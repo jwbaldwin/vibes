@@ -19,6 +19,10 @@ defmodule Vibes.Stations do
   @doc "Loads a station by its permanent ID"
   def get_station!(id), do: Repo.get!(Station, id)
 
+  def get_station_by_slug(slug) do
+    Enum.find(list_stations(), &(Station.slug(&1) == slug))
+  end
+
   def change_station(station, attrs \\ %{}), do: Station.changeset(station, attrs)
 
   def create_station(attrs) do

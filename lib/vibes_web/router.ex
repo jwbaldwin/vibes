@@ -77,4 +77,11 @@ defmodule VibesWeb.Router do
       forward "/mailbox", Plug.Swoosh.MailboxPreview
     end
   end
+
+  # Last, so every fixed path above wins over a station name.
+  scope "/", VibesWeb do
+    pipe_through :browser
+
+    live "/:station", RoomLive, :index
+  end
 end

@@ -2,6 +2,8 @@ defmodule VibesWeb.RoomLive do
   use VibesWeb, :live_view
 
   alias Vibes.Stations
+  alias Vibes.Stations.Station
+  alias VibesWeb.SharePreview
 
   def mount(params, session, socket) do
     socket =
@@ -25,10 +27,18 @@ defmodule VibesWeb.RoomLive do
         # Subscribe before loading so an edit during the read cannot be missed.
         Phoenix.PubSub.subscribe(Vibes.PubSub, "stations")
         catalog = Map.new(Stations.list_stations(), &{to_string(&1.id), &1})
-        station = selected_station(catalog, (get_connect_params(socket) || %{})["station_id"])
+
+        station =
+          linked_station(catalog, params["station"]) ||
+            selected_station(catalog, (get_connect_params(socket) || %{})["station_id"])
 
         socket =
           assign(socket, catalog: catalog, station: station, playback: playback(station, 0))
+
+        socket =
+          if station,
+            do: push_event(socket, "store_station", %{station_id: to_string(station.id)}),
+            else: socket
 
         session_id = session["session_id"] || Ecto.UUID.generate()
         if station, do: VibesWeb.Presence.track_user(to_string(station.id), session_id)
@@ -38,11 +48,27 @@ defmodule VibesWeb.RoomLive do
         |> assign(:session_id, session_id)
         |> refresh_presence()
       else
-        socket
+        share_preview(socket, params["station"])
       end
 
     {:ok, socket}
   end
+
+  def handle_params(_params, _uri, socket), do: {:noreply, socket}
+
+  defp share_preview(socket, nil), do: socket
+
+  defp share_preview(socket, slug) do
+    case Stations.get_station_by_slug(slug) do
+      nil -> redirect(socket, to: ~p"/")
+      station -> assign(socket, :share_preview, SharePreview.station(station))
+    end
+  end
+
+  defp linked_station(_catalog, nil), do: nil
+
+  defp linked_station(catalog, slug),
+    do: catalog |> Map.values() |> Enum.find(&(Station.slug(&1) == slug))
 
   defp selected_station(catalog, id) do
     Map.get(catalog, id) ||
@@ -246,6 +272,7 @@ defmodule VibesWeb.RoomLive do
      socket
      |> assign(station: station, failed_videos: MapSet.new())
      |> push_event("store_station", %{station_id: to_string(station.id)})
+     |> push_patch(to: ~p"/#{Station.slug(station)}", replace: true)
      |> change_video(playback(station, 0))
      |> refresh_presence()}
   end

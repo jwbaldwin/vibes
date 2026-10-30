@@ -153,6 +153,23 @@ defmodule VibesWeb.RoomLiveTest do
     assert :sys.get_state(view.pid).socket.assigns.station.name == "spring"
   end
 
+  test "a station link wins over the saved station and becomes the saved station" do
+    conn =
+      put_connect_params(build_conn(), %{"station_id" => to_string(station_named("winter").id)})
+
+    {:ok, view, _} = live(conn, "/morning-coffee")
+    coffee = station_named("morning coffee")
+
+    assert :sys.get_state(view.pid).socket.assigns.station.id == coffee.id
+    coffee_id = to_string(coffee.id)
+    assert_push_event(view, "store_station", %{station_id: ^coffee_id})
+  end
+
+  test "switching stations puts the station link in the address bar", %{view: view} do
+    view |> element("button#station-#{station_named("blade runner").id}") |> render_click()
+    assert_patch(view, "/blade-runner")
+  end
+
   def record_query(_event, _measurements, metadata, owner),
     do: send(owner, {:database_query, metadata.query})
 

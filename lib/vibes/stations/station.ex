@@ -50,6 +50,11 @@ defmodule Vibes.Stations.Station do
     if station.id, do: optimistic_lock(changeset, :lock_version), else: changeset
   end
 
+  @doc "The path segment that links to this station, e.g. `blade-runner`."
+  def slug(%__MODULE__{name: name}) do
+    name |> String.downcase() |> String.replace(~r/[^a-z0-9]+/, "-") |> String.trim("-")
+  end
+
   defp validate_image(:image_url, url) do
     uri = URI.parse(url)
 

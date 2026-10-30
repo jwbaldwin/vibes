@@ -1,5 +1,6 @@
 defmodule VibesWeb.PageControllerTest do
   use VibesWeb.ConnCase
+  import Vibes.StationsFixtures
 
   test "GET / includes sharing metadata without JavaScript", %{conn: conn} do
     html = conn |> get(~p"/") |> html_response(200) |> LazyHTML.from_document()
@@ -27,6 +28,22 @@ defmodule VibesWeb.PageControllerTest do
     end
 
     assert [_description] = meta(html, "description")
+  end
+
+  test "a station link shares its own title and address", %{conn: conn} do
+    {:ok, _} = Vibes.Stations.create_station(station_attrs())
+    html = conn |> get("/night-train") |> html_response(200) |> LazyHTML.from_document()
+
+    assert meta(html, "og:url") == ["https://vibes.jwbaldwin.com/night-train"]
+    assert [title] = meta(html, "og:title")
+    assert title =~ "Night Train"
+    assert meta(html, "twitter:title") == [title]
+    assert meta(html, "og:image") == ["https://vibes.jwbaldwin.com/images/vibes-og.jpg"]
+    assert meta(html, "og:video") == []
+  end
+
+  test "an unknown station link sends visitors home", %{conn: conn} do
+    assert redirected_to(get(conn, "/no-such-station")) == ~p"/"
   end
 
   test "sharing image is served publicly as JPEG", %{conn: conn} do
