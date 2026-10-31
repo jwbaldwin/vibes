@@ -328,6 +328,23 @@
         "title" => "Coffee Shop Radio  - 24/7 Chill Lo-Fi & Jazzy Beats",
         "live" => true,
         "verified_at" => "2026-09-09T02:47:00Z"
+      },
+      %{
+        "video_id" => "MmGkstX4v6s",
+        "title" => "Saturday Morning Coffee Cabin Ambience With Fireplace And Snowfall",
+        "duration_seconds" => 42898,
+        "start_seconds" => 30,
+        "tune_in" => true,
+        "verified_at" => "2026-10-31T13:00:00Z"
+      },
+      %{
+        "video_id" => "oqEpbAOZBEg",
+        "title" =>
+          "Full Autumn Cinnamon Roll Morning \u{1F342} Cozy Cottage Kitchen & Relaxing Music (5 Hours)",
+        "duration_seconds" => 17963,
+        "start_seconds" => 30,
+        "tune_in" => true,
+        "verified_at" => "2026-10-31T13:00:00Z"
       }
     ]
   }
