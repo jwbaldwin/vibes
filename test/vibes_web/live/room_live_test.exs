@@ -57,6 +57,13 @@ defmodule VibesWeb.RoomLiveTest do
     end)
   end
 
+  test "only the azeroth station shows the forever countdown", %{conn: conn, view: view} do
+    refute has_element?(view, "#forever-countdown")
+
+    {:ok, azeroth, _html} = live(conn, "/azeroth")
+    assert has_element?(azeroth, "#forever-countdown")
+  end
+
   test "video end advances with the current volume", %{view: view} do
     {:ok, station} = Stations.select_video(station_named("winter"), 0)
     render_hook(view, "player_state", %{playing: true, muted: false, volume: 30})

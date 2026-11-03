@@ -283,3 +283,18 @@
 .curation-feedback-context h3 { font-size: 11px; font-weight: 500; margin-bottom: 8px; color: #888; }
 .curation-feedback-context dl { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 4px 18px; }
 .curation-feedback-context dd { overflow-wrap: anywhere; }
+
+/* WoW: Forever launch countdown, shown only on the Azeroth station. */
+.forever-countdown { position: absolute; top: 5rem; left: 2.5rem; z-index: 2; width: min(17rem, calc(100vw - 5rem)); padding: 1.25rem 1rem; text-align: center; }
+.forever-heading { color: #ffd76a; text-shadow: 0 0 2px #fff3c4, 0 0 12px #c98a00, 0 0 40px #c98a00; }
+.forever-label { font-size: 12px; opacity: .8; margin-top: .5rem; }
+.forever-clock { font-size: 22px; font-variant-numeric: tabular-nums; margin-top: .25rem; color: white; text-shadow: 0 0 1px #fff, 0 0 16px #e6e6e6, 0 0 30px #c8c8c8; }
+.forever-countdown[data-state=counting] .forever-live, .forever-countdown[data-state=live] .forever-counting { display: none; }
+.forever-countdown[data-state=live] .forever-clock { color: #ffd76a; text-shadow: 0 0 2px #fff3c4, 0 0 16px #c98a00, 0 0 50px #c98a00; animation: forever-glow 2.4s ease-in-out infinite; }
+.forever-final-minute .forever-clock { color: #ffb3b3; text-shadow: 0 0 1px #ffcccc, 0 0 15px #f00, 0 0 60px #f00; }
+.forever-tip { display: block; width: 100%; margin-top: .9rem; font-size: 12px; line-height: 1.4; color: #bbffbb; text-shadow: 0 0 2px #bbffbb, 0 0 12px #008000; cursor: pointer; }
+.forever-tip-in { animation: now-playing-in 600ms var(--ease-out-quint); }
+@keyframes forever-glow { 50% { opacity: .65; } }
+@media (prefers-reduced-motion: reduce) {
+  .forever-tip-in, .forever-countdown[data-state=live] .forever-clock { animation: none; }
+}

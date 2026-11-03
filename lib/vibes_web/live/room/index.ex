@@ -101,6 +101,7 @@ defmodule VibesWeb.RoomLive do
       <% else %>
         <%= if @station && @playback do %>
           <VibesWeb.Effects.effect effect={@station.effect} />
+          <VibesWeb.ForeverCountdown.countdown :if={@station.seed_key == "azeroth"} />
           <.live_component module={VibesWeb.RoomStats} id="stats" presences={@presences} />
           <.live_component
             module={VibesWeb.StationPicker}
