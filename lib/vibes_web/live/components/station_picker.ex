@@ -56,16 +56,14 @@ defmodule VibesWeb.StationPicker do
               :for={station <- @stations}
               id={"station-#{station.id}"}
               class="text-center group"
+              style={"--accent: #{VibesWeb.StationVibes.accent(station.seed_key)}"}
               phx-click={JS.dispatch("station:pick") |> JS.push("select_station")}
               data-station-key={station.shortcut}
               data-station-selected={to_string(@selected_id == station.id)}
               phx-value-id={station.id}
               phx-target={@myself}
             >
-              <div class={[
-                "h-28 w-28 rounded-lg overflow-hidden bg-zinc-800 transition-shadow duration-150 ease-out group-hover:ring-2 group-hover:ring-white/50 sm:h-32 sm:w-32",
-                @selected_id == station.id && "ring-2 ring-green-500/80"
-              ]}>
+              <div class="station-thumb relative h-28 w-28 rounded-lg overflow-hidden bg-zinc-800 sm:h-32 sm:w-32">
                 <img
                   :if={station.image_url}
                   src={station.image_url}
@@ -77,8 +75,10 @@ defmodule VibesWeb.StationPicker do
                   :if={!station.image_url}
                   class="flex h-full items-center justify-center text-3xl text-white"
                 >♫</span>
+                <VibesWeb.StationVibes.weather seed_key={station.seed_key} />
+                <span class="on-air-tag" aria-hidden="true">on air</span>
               </div>
-              <span class="block pt-2 text-xs text-white text-shadow-green">
+              <span class="station-label block pt-2 text-xs text-white text-shadow-green">
                 [{station.shortcut}] {station.name}
                 <span class="inline-block w-1.5 h-1.5 ml-1.5 bg-red-400"></span>
                 {Map.get(@listener_counts, to_string(station.id), 0)}
@@ -86,6 +86,15 @@ defmodule VibesWeb.StationPicker do
               <span class="block text-xs text-white/60">{station.category}</span>
             </button>
           </div>
+          <button
+            id="picker-style-toggle"
+            type="button"
+            phx-hook="PickerStyle"
+            phx-update="ignore"
+            class="picker-style-toggle"
+          >
+            tiles: on air
+          </button>
         </div>
       </div>
     </div>

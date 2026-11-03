@@ -27,12 +27,14 @@ import StationPicker from "./hooks/station_picker.js";
 import AdminPreview from "./hooks/admin_preview.js";
 import StationSwitch from "./hooks/station_switch.js";
 import ForeverCountdown from "./hooks/forever_countdown.js";
+import PickerStyle from "./hooks/picker_style.js";
 
 import FeedbackWidget from "./hooks/feedback_widget.js";
 
 let Hooks = {
   FeedbackWidget,
   ForeverCountdown,
+  PickerStyle,
   StationSwitch,
   YouTubePlayer: YouTubePlayer,
   StationSelection,

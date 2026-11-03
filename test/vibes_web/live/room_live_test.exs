@@ -64,6 +64,15 @@ defmodule VibesWeb.RoomLiveTest do
     assert has_element?(azeroth, "#forever-countdown")
   end
 
+  test "picker tiles carry an on air tag and each station's own weather", %{view: view} do
+    winter = station_named("winter")
+
+    assert has_element?(view, "#station-#{winter.id}[data-station-selected=true] .on-air-tag")
+    assert has_element?(view, "#station-#{winter.id} .weather-snow i")
+    assert has_element?(view, "#station-#{station_named("cozy").id} .weather-candle")
+    assert has_element?(view, "#picker-style-toggle[phx-hook=PickerStyle]")
+  end
+
   test "video end advances with the current volume", %{view: view} do
     {:ok, station} = Stations.select_video(station_named("winter"), 0)
     render_hook(view, "player_state", %{playing: true, muted: false, volume: 30})
